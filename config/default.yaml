@@ -1,0 +1,78 @@
+# Shared Visium HD defaults; project settings override matching keys.
+packages: [Seurat, dplyr, ggplot2, patchwork]
+optional_packages: [harmony, spacexr, Banksy, SeuratWrappers, RANN]
+seed: 1001
+future_globals_max_size_gb: 24
+platform: visium_hd
+
+visium_hd:
+  bin_size: 8
+  assay: Spatial.008um
+  sample_col: sample
+  group_col: group
+
+qc_feature_patterns:
+  mitochondrial: "^(MT-|mt-)"
+  ribosomal: "^(RPS|RPL|Rps|Rpl)"
+
+qc_default:
+  nFeature_min: 50
+  nFeature_max: .inf
+  nCount_min: 50
+  nCount_max: .inf
+  percent_mt_max: 20
+  log10GenesPerUMI_min: 0.6
+
+cluster:
+  normalization_method: LogNormalize
+  scale_factor: 10000
+  sketch_ncells: 50000
+  nfeatures: 3000
+  npcs: 50
+  dims: null
+  min_dims: 10
+  max_dims: 50
+  resolution: 0.4
+  batch_method: harmony
+  batch_col: sample
+  regress_vars: []
+
+markers:
+  assay: Spatial.008um
+  cluster_col: cluster_full
+  downsample_per_cluster: 1000
+  only_pos: true
+  test_use: wilcox
+  min_pct: 0.1
+  logfc_threshold: 0.25
+  top_n: 5
+
+spatial_plot:
+  point_size_factor: 2.5
+  width: 9
+  height: 8
+
+rctd:
+  reference_assay: RNA
+  reference_celltype_col: cell_type
+  max_cores: 10
+  umi_min: 50
+  doublet_mode: doublet
+
+banksy:
+  lambda: 0.8
+  k_geom: 50
+  npcs: 30
+  dims: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+  resolution: 0.5
+  cluster_col: banksy_cluster
+
+spatial_stats:
+  method: moransi
+  nfeatures: 2000
+  top_n: 12
+
+neighborhood:
+  group_by: cell_type
+  k: 20
+  pseudocount: 1.0e-6

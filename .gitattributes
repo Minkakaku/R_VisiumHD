@@ -6,4 +6,8 @@
 *.Rmd text eol=lf
 *.rmd text eol=lf
 *.tsv text eol=lf
+*.csv text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
 source_catalog/** -text
+legacy/original/** -text

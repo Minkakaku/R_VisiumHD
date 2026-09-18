@@ -1,23 +1,44 @@
 # Project data and generated outputs
-data/
-results/
-logs/
-docs/reports/*.html
-docs/reports/*.pdf
+projects/*/data/raw/*
+!projects/*/data/raw/.gitkeep
+projects/*/data/processed/*
+!projects/*/data/processed/.gitkeep
+projects/*/data/reference/*
+!projects/*/data/reference/.gitkeep
+projects/*/results/*
+!projects/*/results/.gitkeep
+projects/*/logs/*
+!projects/*/logs/.gitkeep
+projects/*/docs/reports/*
+!projects/*/docs/reports/.gitkeep
 
-# R and Python runtime files
+# Large spatial and single-cell files
+*.bam
+*.bai
+*.fastq
+*.fq
+*.fastq.gz
+*.fq.gz
+*.h5
+*.h5ad
+*.loom
+*.rds
+*.qs
+*.qs2
+*.parquet
+*.tif
+*.tiff
+*.ome.tif
+*.ome.tiff
+*.tmp
+
+# R and editor state
 .Rhistory
 .RData
 .Rproj.user/
-__pycache__/
-*.py[cod]
-.pytest_cache/
-.ipynb_checkpoints/
-
-# Local environment and editor files
-.env
-.venv/
 .vscode/
 .idea/
+__pycache__/
+.ipynb_checkpoints/
 .DS_Store
 Thumbs.db

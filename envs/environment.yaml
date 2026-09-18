@@ -1,0 +1,27 @@
+name: r-visium-hd-workflow
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  # 正式 Visium HD 主流程
+  - r-base>=4.4
+  - r-seurat>=5.1
+  - r-seuratobject
+  - r-dplyr
+  - r-ggplot2
+  - r-patchwork
+  - r-yaml
+  - r-future
+  - r-matrix
+  - r-png
+  - r-arrow
+  - r-remotes
+  - r-data.table
+
+  # 多样本校正、自动 PCA 拐点和 kNN 邻域
+  - r-harmony
+  - bioconductor-pcatools
+  - r-nfactors
+  - r-rann
+
+  # spacexr、Banksy 和 SeuratWrappers 按 README 的可选步骤安装
