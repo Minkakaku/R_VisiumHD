@@ -7,19 +7,19 @@ run_step02_clustering <- function() {
   settings <- obj@misc$spatial_pipeline
 
   # sketch UMAP 显示实际用于建图和聚类的子集。
-  p_cluster <- Seurat::DimPlot(
+  p_cluster <- npg_dimplot(
     obj,
     reduction = settings$cluster_umap,
     group.by = "seurat_clusters",
     label = TRUE,
     repel = TRUE,
-    raster = TRUE
+    raster = FALSE
   ) + ggplot2::coord_fixed()
-  p_sample <- Seurat::DimPlot(
+  p_sample <- npg_dimplot(
     obj,
     reduction = settings$cluster_umap,
     group.by = VISIUM_HD$sample_col,
-    raster = TRUE
+    raster = FALSE
   ) + ggplot2::coord_fixed()
   save_plot(
     p_cluster,
@@ -35,19 +35,19 @@ run_step02_clustering <- function() {
   # sketch 模式额外输出 ProjectData 后的全部 8 µm bins UMAP。
   if (settings$sketch &&
       settings$full_umap %in% Seurat::Reductions(obj)) {
-    p_full_cluster <- Seurat::DimPlot(
+    p_full_cluster <- npg_dimplot(
       obj,
       reduction = settings$full_umap,
       group.by = "cluster_full",
       label = TRUE,
       repel = TRUE,
-      raster = TRUE
+      raster = FALSE
     ) + ggplot2::coord_fixed()
-    p_full_sample <- Seurat::DimPlot(
+    p_full_sample <- npg_dimplot(
       obj,
       reduction = settings$full_umap,
       group.by = VISIUM_HD$sample_col,
-      raster = TRUE
+      raster = FALSE
     ) + ggplot2::coord_fixed()
     save_plot(
       p_full_cluster,

@@ -65,7 +65,7 @@ save_marker_dotplot <- function(marker_obj, markers) {
       ggplot2::aes(size = pct.exp, color = avg.exp.scaled)
     ) +
     ggplot2::scale_color_gradientn(
-      colours = c("#FCE9DF", "#F8B99F", "#EE6A50", "#B30000")
+      colours = HONGF_NPG_SEQUENTIAL
     ) +
     ggplot2::labs(
       x = NULL, y = NULL,
@@ -74,9 +74,8 @@ save_marker_dotplot <- function(marker_obj, markers) {
     ) +
     ggplot2::theme_bw(base_size = 13) +
     ggplot2::theme(
-      panel.grid.major = ggplot2::element_line(
-        color = "#DADADA", linewidth = 0.32
-      ),
+      panel.grid.major.x = ggplot2::element_blank(),
+      panel.grid.major.y = ggplot2::element_line(color = "#E6E6E6", linewidth = 0.32),
       panel.grid.minor = ggplot2::element_blank(),
       panel.border = ggplot2::element_rect(
         color = "#4A4A4A", fill = NA, linewidth = 0.72
@@ -84,7 +83,10 @@ save_marker_dotplot <- function(marker_obj, markers) {
       axis.ticks = ggplot2::element_blank(),
       axis.text.x = ggplot2::element_text(
         angle = 90, hjust = 1, vjust = 0.5
-      )
+      ),
+      plot.title = ggplot2::element_blank(),
+      plot.subtitle = ggplot2::element_blank(),
+      plot.margin = ggplot2::margin(3, 3, 3, 3)
     )
 
   save_plot(

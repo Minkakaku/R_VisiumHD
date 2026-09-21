@@ -99,9 +99,9 @@ save_spatial_neighborhood_outputs <- function(table) {
     ggplot2::geom_tile() +
     ggplot2::facet_wrap(~image) +
     ggplot2::scale_fill_gradient2(
-      low = "#2166AC",
+      low = HONGF_NPG_DIVERGING[1],
       mid = "white",
-      high = "#B2182B",
+      high = HONGF_NPG_DIVERGING[3],
       midpoint = 0
     ) +
     ggplot2::coord_fixed() +

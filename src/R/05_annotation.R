@@ -46,13 +46,13 @@ default_annotation_reduction <- function(obj) {
 # 保存以生物学标签显示的完整数据 UMAP。
 save_annotation_umap <- function(obj) {
   reduction <- default_annotation_reduction(obj)
-  p <- Seurat::DimPlot(
+  p <- npg_dimplot(
     obj,
     reduction = reduction,
     group.by = "cell_type",
     label = TRUE,
     repel = TRUE,
-    raster = TRUE
+    raster = FALSE
   ) + ggplot2::coord_fixed()
 
   save_plot(

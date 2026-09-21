@@ -1,11 +1,8 @@
 # 空间坐标、注释和基因表达图
 # 图形遵循统一配色，并与精确坐标/metadata 表放在同一个结果目录。
 
-# 用户偏好的浅黄→深蓝表达梯度。
-feature_cols <- c(
-  "#FFEFD5", "#E6E6FA", "#87CEFA",
-  "#6495ED", "#4169E1", "#0000CD", "#000080"
-)
+# 统一使用 NPG 浅红到深酒红连续表达梯度。
+feature_cols <- HONGF_NPG_SEQUENTIAL
 
 # 统一提取空间坐标和 cell_id，兼容 VisiumV2 行名与 FOV 的 cell 列。
 spatial_coordinates <- function(obj, image) {
@@ -36,11 +33,14 @@ save_spatial_annotation_plots <- function(
   stem_prefix = "spatial"
 ) {
   for (image in Seurat::Images(obj)) {
+    labels <- obj[[group_by, drop = TRUE]]
+    labels <- if (is.factor(labels)) levels(droplevels(labels)) else sort(unique(as.character(labels)))
     p <- Seurat::SpatialDimPlot(
       obj,
       images = image,
       group.by = group_by,
-      pt.size.factor = SPATIAL_PLOT$point_size_factor
+      pt.size.factor = SPATIAL_PLOT$point_size_factor,
+      cols = unname(npg_palette(labels))
     ) +
       ggplot2::ggtitle(sub("\\.[0-9]{3}um$", "", image))
 
@@ -120,7 +120,7 @@ write_spatial_results_note <- function(obj) {
         "- 使用 PC：", paste(settings$dims, collapse = ", "),
         "；resolution = ", settings$resolution, "。"
       ),
-      "- 每张正式图均成对保存为 300 dpi PNG 和矢量 PDF。",
+      "- 每张正式图均成对保存为 600 dpi PNG 和矢量 PDF。",
       "- spatial_metadata_*.csv 保存坐标、样本、cluster 和细胞类型。",
       "- Visium HD 的观测单位为 8 µm bins，不等同于 Xenium 单细胞边界。"
     )

@@ -38,7 +38,7 @@ run_step01_load_qc <- function() {
       "- platform_detection.csv 记录每个样本的平台判定。",
       "- qc_summary.csv 记录过滤前后 bin 数和主要 QC 指标。",
       "- qc_thresholds_used.csv 记录本次实际使用的逐样本阈值。",
-      "- 每个 QC 图同时保存 300 dpi PNG 和矢量 PDF。"
+      "- 每个 QC 图同时保存 600 dpi PNG 和矢量 PDF。"
     )
   )
   invisible(merged)

@@ -40,9 +40,9 @@ save_pca_elbow <- function(obj, path_no_ext, reduction = "pca") {
   save_table(result$selections, paste0(path_no_ext, "_selection.csv"))
 
   method_colors <- c(
-    PCAtools = "#B2182B",
-    nFactors_noc = "#2166AC",
-    nFactors_naf = "#f6ae00"
+    PCAtools = HONGF_NPG[1],
+    nFactors_noc = HONGF_NPG[4],
+    nFactors_naf = HONGF_NPG[3]
   )
   p <- ggplot2::ggplot(
     result$variance,
@@ -62,16 +62,12 @@ save_pca_elbow <- function(obj, path_no_ext, reduction = "pca") {
       x = "Principal component",
       y = "Explained variance (%)",
       title = "Visium HD PCA variance and automatic elbow",
-      subtitle = paste0(
-        "PCAtools recommendation: PC", result$recommended_pc
-      ),
       color = NULL,
       linetype = NULL
     ) +
     ggplot2::theme_classic(base_size = 13) +
     ggplot2::theme(
-      plot.title = ggplot2::element_text(hjust = 0.5),
-      plot.subtitle = ggplot2::element_text(hjust = 0.5)
+      plot.title = ggplot2::element_text(hjust = 0.5)
     )
   save_plot(p, path_no_ext)
   result
