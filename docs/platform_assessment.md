@@ -25,4 +25,4 @@
 - 代码内容检索到 Xenium 特征：186 份；
 - 代码内容检索到 Visium HD 特征：92 份。
 
-因此，`source_catalog/` 不能整体视为一个平台的正式流程。正式 `src/` 只采用 Visium HD 逻辑；Xenium 代码保留用于溯源，正式 Xenium 分析继续使用同级 `Python-xenium-workflow-template`。
+因此，`source_catalog/` 不能整体视为一个平台的正式流程。正式 `src/` 只采用 Visium HD 逻辑；Xenium 代码保留用于溯源，正式 Xenium 分析继续使用同级 `Python_Xenium`。

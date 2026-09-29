@@ -1,84 +1,66 @@
-# R-visium-hd-workflow-template
+# R_VisiumHD
 
-正式定位：**R/Seurat Visium HD 多步骤主流程**。它读取 Space Ranger binned output，默认分析 8 µm bins；不是 Xenium 分割细胞流程。
+跨项目复用的 R 公共分析代码库。仓库管理公共方法、默认配置、环境和项目示例；实际项目在 `projects/<项目名>/` 使用这些方法，数据和运行产物不提交 Git。
 
-原始 `spatial_dat_analysis.R` 使用 `binned_outputs/square_008um`、`Load10X_Spatial(bin.size = 8)`、`Spatial.008um`、`VisiumV2`、`SketchData()` 和 `ProjectData()`，因此平台明确为 Visium HD。
-
-## 项目结构
+## 目录
 
 ```text
-.
-├── src/R/                         # 可复用函数与 9 个组合分析点
-├── config/                        # 公共默认参数和参考文件名
-├── projects/project1/
-│   ├── config/                    # 样本、QC 阈值和人工注释
-│   ├── workflow/                  # 按实际运行顺序编号的短入口
-│   ├── data/{raw,processed,reference}/
-│   ├── results/                   # 01–09 分析结果
-│   ├── logs/
-│   └── docs/reports/
-├── envs/
-├── tests/
-├── legacy/original/               # 原始脚本，逐字节保留
-└── source_catalog/                # 其他人员来源代码，仅供查阅
+src/R/       公共分析方法与配置加载器
+config/            公共默认参数与参考配置
+envs/              共享环境定义
+projects/project1/ 示例项目（未运行）
+  config/          项目覆盖、样本表、QC/注释等人工决策
+  workflow/        编号短脚本与分阶段 runner
+  data/processed/  中间对象
+  data/reference/  项目参考资源
+  results/         按分析点保存图表与中文说明
+  logs/            运行记录
+tests/             路径和项目配置检查
 ```
 
-## 正式分析点
+## 新项目
 
-| 顺序 | 结果目录 | 入口 | 作用 |
-|---|---|---|---|
-| 01 | `01_qc` | `run_step01_load_qc()` | 平台识别、8 µm bins 加载、逐样本 QC 和过滤 |
-| 02 | `02_clustering` | `run_step02_clustering()` | LogNormalize、sketch、自动 PC、可选 Harmony、聚类和完整 bins 投射 |
-| 03 | `03_markers` | `run_step03_markers()` | 完整投射 bins + `Spatial.008um` marker |
-| 04 | `04_annotation` | `run_step04_annotation()` | cluster 到生物学标签的人工映射 |
-| 05 | `05_spatial` | `run_step05_spatial_plots()` | 注释和基因表达空间图、坐标与 metadata |
-| 06 | `06_rctd` | `run_step06_rctd()` | 可选 RCTD 解卷积及完整权重 |
-| 07 | `07_banksy_domains` | `run_step07_banksy()` | 可选 BANKSY 连续组织域 |
-| 08 | `08_spatial_statistics` | `run_step08_spatial_statistics()` | Moran's I 空间变异基因 |
-| 09 | `09_neighborhood` | `run_step09_neighborhood()` | 每个切片独立的 kNN 邻域组成 |
-
-## 开始项目
-
-1. 复制 `projects/project1/` 并改成项目名。
-2. 把 Space Ranger 结果放到项目 `data/raw/<sample>/outs/`。
-3. 修改项目 `config/samples.tsv`、`qc_thresholds.tsv` 和 `config.yaml`。
-4. 从仓库根目录按编号运行项目 `workflow/`。
-5. marker 完成后人工复核 `cluster_annotation.tsv`，再执行注释。
-
-单个入口保持简短：
-
-```r
-source("src/R/project_config.R")
-load_project("projects/project1")
-run_step02_clustering()
-```
-
-已经运行过的 workflow 不覆盖；参数变化或补充分析新建下一个编号脚本。模板不提供跨越人工检查点的 `run_all`。
-
-## 环境与测试
+在仓库根目录执行：
 
 ```bash
 conda env create -f envs/environment.yaml
-conda activate r-visium-hd-workflow
-Rscript tests/test_project_config.R
+cp -R projects/project1 projects/my_project
 ```
 
-RCTD 另装 `spacexr`；BANKSY 步骤另装 `Banksy` 和 `SeuratWrappers`。这些依赖只在对应可选步骤执行时检查。
+修改 `projects/my_project/config/config.yaml` 和样本/注释表，准备输入对象与参考文件。示例中的物种、reference、root、分组和文件名必须按真实项目核对，不能直接作为生物学结论。
 
-## 方法边界
+每个编号脚本可单独执行；脚本从自身位置定位项目，因此复制后不会继续写入 project1。Python 包项目先完成 editable install。
 
-- marker 使用 ProjectData 后的完整 bins 和完整 `Spatial.008um` assay，不只使用 sketch。
-- ProjectData 使用带 feature loadings 的 PCA；Harmony 可用于多样本 sketch 聚类，但不作为投射模型。
-- 8 µm bin 不等同于 Xenium 分割细胞。
-- BANKSY cluster 表示空间组织域，不直接等同于细胞类型。
-- Moran's I 是空间自相关，不是 CON/EXP 差异表达。
-- 组间统计必须以样本为重复单位，不能把 bins 当作生物学重复。
+```bash
+Rscript projects/my_project/workflow/00_setup.R
+```
 
-详细方法依据见 [docs/method_references.md](docs/method_references.md)，分析点与来源代码边界见 [docs/analysis_points.md](docs/analysis_points.md)。
+可用步骤：
+- `00_setup.R`
+- `01_Load_QC.R`
+- `02_Clustering.R`
+- `03_Markers.R`
+- `04_Annotation.R`
+- `05_Spatial_plots.R`
+- `06_RCTD.R`
+- `07_BANKSY.R`
+- `08_Spatial_statistics.R`
+- `09_Neighborhood.R`
 
-## 来源与原始代码
+`run_all.sh` 对主流程只运行到 QC 检查点；独立分析方法需显式选择步骤，避免把不同候选方法混为同一条流程。已运行脚本不改写，重跑新增编号并使用新输出目录。
 
-`source_catalog/` 的逐文件用途见 [docs/source_code_guide.tsv](docs/source_code_guide.tsv)。正式 workflow 不加载来源代码或 Xenium 脚本。
+## 配置与路径
 
-- `legacy/original/spatial_dat_analysis.R`：SHA-256 `1ca295163196b8369de2f2f0ff90b483fb9b5f5dc8ad8f149f8732ad8eace2a1`
-- `legacy/original/muti_group_cellchat_Spatial.R`：SHA-256 `e25e4a906602748efb314665c58df9103ad3a93bfd177b0194bff6127d4e52d7`
+公共 `config/default.yaml` → `config/reference.yaml` → 项目 `config/config.yaml`，后者覆盖前者。嵌套映射按键合并，列表和标量整体替换。共享方法接收配置/参数，不包含实际项目路径与样本名。项目相对输入输出路径以项目目录为基准；参考文件路径写在配置中。
+
+## 结果与解释
+
+最终图保存同名 PNG/PDF，配套 CSV/TSV 和 `README_results_CN.md` 放在分析点结果目录。中间对象放在 `data/processed/`。细胞或空间 bins 不作为独立生物学重复；条件比较用样本级汇总。方法特有约束见 [AGENTS.md](AGENTS.md) 和公共代码注释。
+
+## 验证
+
+```bash
+Rscript tests/test_project.R
+```
+
+此检查验证配置、路径或安全导入，不运行真实组学分析。完整分析需要对应生信依赖、真实输入数据和人工 QC/注释。

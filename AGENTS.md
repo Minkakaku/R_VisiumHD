@@ -1,11 +1,16 @@
-# Repository instructions
+# R_VisiumHD 公共分析代码规范
 
-- This is the R/Seurat Visium HD main workflow, defaulting to Space Ranger 8 µm bins.
-- Put reusable functions in `src/R/`; shared defaults in root `config/`; project samples, thresholds, paths, and annotations in `projects/<project>/config/`.
-- Keep numbered project workflow scripts short and append-only. Do not add notebooks or a `run_all` across QC and annotation checkpoints.
+- 本仓库保存同类分析跨项目复用的 R 代码；具体项目放在 `projects/<项目>/`。
+- 复用方法放在 `src/R/`；公共默认放在 `config/`；环境放在 `envs/`。
+- 项目配置覆盖公共默认；样本、QC、注释和路径放在项目 `config/`。
+- 项目 `workflow/` 使用编号短脚本，只加载配置、调用公共方法并记录日志；已运行脚本不覆盖。
+- 模板 project1 仅是使用示例，不代表已完成分析；实际项目数据、结果和日志不提交。
+- 中间对象放在项目 `data/processed/`，正式图表放在项目 `results/编号_分析点/`。
+- 不在公共代码写项目路径、样本名或固定注释；不改写历史来源档案。
+- 保留 QC 和人工注释检查点；不同候选方法不自动全部串行执行。
+- 目录变更同步更新安装配置、入口、说明和测试。默认不引入工作流引擎。
 - Save RDS intermediates under project `data/processed/`, references under `data/reference/`, and final outputs under numbered project `results/` directories.
 - Save each formal figure as matching PNG/PDF and keep its supporting table and `README_results_CN.md` in the same analysis directory.
-- Keep Xenium and historical scripts in `source_catalog/` or `legacy/original/`; never source them from the formal workflow and preserve original bytes.
 - Marker analysis uses projected full bins and the full `Spatial.008um` assay. ProjectData must use PCA with feature loadings; Harmony may guide sketch clustering but is not the projection reduction.
 - Do not treat Visium HD bins as segmented cells, BANKSY domains as cell types, Moran's I as group DE, or bins as biological replicates.
 - Keep concise Chinese comments above formal functions and important algorithm blocks.
