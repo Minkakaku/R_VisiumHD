@@ -14,3 +14,4 @@
 - Marker analysis uses projected full bins and the full `Spatial.008um` assay. ProjectData must use PCA with feature loadings; Harmony may guide sketch clustering but is not the projection reduction.
 - Do not treat Visium HD bins as segmented cells, BANKSY domains as cell types, Moran's I as group DE, or bins as biological replicates.
 - Keep concise Chinese comments above formal functions and important algorithm blocks.
+- 项目目录统一使用小写 `projects/`；默认分类配色使用固定 NPG 色序，连续与双向数值使用 NPG 衍生渐变，项目显式配色可覆盖默认值。
