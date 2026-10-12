@@ -75,7 +75,7 @@ save_marker_dotplot <- function(marker_obj, markers) {
     ggplot2::theme_bw(base_size = 13) +
     ggplot2::theme(
       panel.grid.major.x = ggplot2::element_blank(),
-      panel.grid.major.y = ggplot2::element_line(color = "#E6E6E6", linewidth = 0.32),
+      panel.grid.major.y = ggplot2::element_blank(),
       panel.grid.minor = ggplot2::element_blank(),
       panel.border = ggplot2::element_rect(
         color = "#4A4A4A", fill = NA, linewidth = 0.72
